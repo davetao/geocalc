@@ -6,3 +6,5 @@ install:
   - mvn validate
 before_script:
   - ".travis/before-script.sh"
+script:
+  - ".travis/build.sh"
