@@ -1,6 +1,7 @@
 /*
  * BSD 3-Clause License
  *
+ * Copyright (c) 2017, Peer to Park
  * Copyright (c) 2015, Grumlimited Ltd (Romain Gallet)
  * All rights reserved.
  *
@@ -29,41 +30,22 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.peertopark.java.geocalc;
 
-package com.grum.geocalc;
-
-import static java.lang.Math.abs;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 /**
- * Represents coordinates given in
- * Degrees Minutes decimal-seconds (D M s) format
  *
- * @author rgallet
+ * @author hector
  */
-public class DMSCoordinate extends Coordinate {
-
-    private double wholeDegrees, minutes, seconds;
-
-    public DMSCoordinate(double wholeDegrees, double minutes, double seconds) {
-        this.wholeDegrees = wholeDegrees;
-        this.minutes = minutes;
-        this.seconds = seconds;
-        this.decimalDegrees = abs(this.wholeDegrees) + minutes / 60 + seconds / 3600;
-
-        if(wholeDegrees < 0) {
-            this.decimalDegrees = -this.decimalDegrees;
-        }
+public class DegreeCoordinateTest {
+    
+    @Test
+    public void testBuild() {
+        double decimalDegrees = 69.69;
+        DegreeCoordinate coordinate = DegreeCoordinate.build(decimalDegrees);
+        assertEquals(decimalDegrees, coordinate.getValue(), 0.0);
     }
-
-    public double getMinutes() {
-        return minutes;
-    }
-
-    public double getWholeDegrees() {
-        return wholeDegrees;
-    }
-
-    public double getSeconds() {
-        return seconds;
-    }
+    
 }

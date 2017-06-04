@@ -1,7 +1,8 @@
 /*
  * BSD 3-Clause License
  *
- * Copyright (c) 2017, Grumlimited Ltd (Romain Gallet)
+ * Copyright (c) 2017, Peer to Park
+ * Copyright (c) 2015, Grumlimited Ltd (Romain Gallet)
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,7 +31,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.grum.geocalc;
+package com.peertopark.java.geocalc;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

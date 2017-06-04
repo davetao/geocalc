@@ -4,12 +4,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.grum</groupId>
+    <groupId>com.peertopark.java</groupId>
     <artifactId>geocalc</artifactId>
     <packaging>jar</packaging>
-    <version>0.5.1</version>
+    <version>1.1.0-SNAPSHOT</version>
     <name>${project.groupId}.${project.artifactId}</name>
-    <url>http://www.grumlimited.co.uk</url>
+    <url>https://www.peertopark.com/</url>
     <description>Simple Geocalc Library</description>
     <licenses>
         <license>
@@ -17,12 +17,14 @@
         </license>
     </licenses>
     <organization>
-        <name>Grumlimited</name>
-        <url>http://www.grumlimited.co.uk</url>
+        <name>Peer to Park</name>
+        <url>https://www.peertopark.com</url>
     </organization>
     <developers>
         <developer>
             <name>Grum</name>
+            <organization>Grumlimited</organization>
+            <organizationUrl>http://www.grumlimited.co.uk</organizationUrl>
         </developer>
         <developer>
             <name>Blackleg</name>
@@ -36,13 +38,13 @@
     </prerequisites>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
     <scm>
-        <connection>scm:git:git@github.com:grumlimited/geocalc.git</connection>
-        <developerConnection>scm:git:git@github.com:grumlimited/geocalc.git</developerConnection>
-        <url>https://github.com/grumlimited/geocalc</url>
+        <connection>scm:git:git@github.com:peertopark/geocalc.git</connection>
+        <developerConnection>scm:git:git@github.com:peertopark/geocalc.git</developerConnection>
+        <url>https://github.com/peertopark/geocalc</url>
     </scm>
     <distributionManagement>
         <snapshotRepository>
@@ -87,7 +89,7 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.7</version>
+                        <version>1.6.8</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>
