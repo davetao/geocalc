@@ -1,6 +1,7 @@
 /*
  * BSD 3-Clause License
  *
+ * Copyright (c) 2017, Peer to Park
  * Copyright (c) 2015, Grumlimited Ltd (Romain Gallet)
  * All rights reserved.
  *
@@ -29,8 +30,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
-package com.grum.geocalc;
+package com.peertopark.java.geocalc;
 
 import static java.lang.Math.*;
 
@@ -47,7 +47,7 @@ public class EarthCalc {
      * Returns the distance between two points using spherical law of cosines.
      *
      * @param standPoint The stand point
-     * @param forePoint  The fore point
+     * @param forePoint The fore point
      * @return The distance, in meters
      */
     public static double getDistance(Point standPoint, Point forePoint) {
@@ -66,7 +66,7 @@ public class EarthCalc {
      * Returns the distance between two points using Harvesine formula.
      *
      * @param standPoint The stand point
-     * @param forePoint  The fore point
+     * @param forePoint The fore point
      * @return The distance, in meters
      */
     public static double getHarvesineDistance(Point standPoint, Point forePoint) {
@@ -84,10 +84,11 @@ public class EarthCalc {
     }
 
     /**
-     * Calculate distance, (azimuth) bearing and final bearing between standPoint and forePoint.
+     * Calculate distance, (azimuth) bearing and final bearing between
+     * standPoint and forePoint.
      *
      * @param standPoint The stand point
-     * @param forePoint  The fore point
+     * @param forePoint The fore point
      * @return Vincenty object which holds all 3 values
      */
     private static Vincenty getVincenty(Point standPoint, Point forePoint) {
@@ -111,26 +112,32 @@ public class EarthCalc {
             cosλ = cos(λ);
             double sinSqσ = (cosU2 * sinλ) * (cosU2 * sinλ) + (cosU1 * sinU2 - sinU1 * cosU2 * cosλ) * (cosU1 * sinU2 - sinU1 * cosU2 * cosλ);
             sinσ = sqrt(sinSqσ);
-            if (sinσ == 0) return new Vincenty(0, 0, 0);  // co-incident points
+            if (sinσ == 0) {
+                return new Vincenty(0, 0, 0);  // co-incident points
+            }
             cosσ = sinU1 * sinU2 + cosU1 * cosU2 * cosλ;
             σ = atan2(sinσ, cosσ);
             double sinα = cosU1 * cosU2 * sinλ / sinσ;
             cosSqα = 1 - sinα * sinα;
             cos2σM = cosσ - 2 * sinU1 * sinU2 / cosSqα;
 
-            if (Double.isNaN(cos2σM)) cos2σM = 0;  // equatorial line: cosSqα=0 (§6)
+            if (Double.isNaN(cos2σM)) {
+                cos2σM = 0;  // equatorial line: cosSqα=0 (§6)
+            }
             double C = f / 16 * cosSqα * (4 + f * (4 - 3 * cosSqα));
             λʹ = λ;
             λ = L + (1 - C) * f * sinα * (σ + C * sinσ * (cos2σM + C * cosσ * (-1 + 2 * cos2σM * cos2σM)));
         } while (abs(λ - λʹ) > 1e-12 && --iterationLimit > 0);
 
-        if (iterationLimit == 0) throw new IllegalStateException("Formula failed to converge");
+        if (iterationLimit == 0) {
+            throw new IllegalStateException("Formula failed to converge");
+        }
 
         double uSq = cosSqα * (a * a - b * b) / (b * b);
         double A = 1 + uSq / 16384 * (4096 + uSq * (-768 + uSq * (320 - 175 * uSq)));
         double B = uSq / 1024 * (256 + uSq * (-128 + uSq * (74 - 47 * uSq)));
-        double Δσ = B * sinσ * (cos2σM + B / 4 * (cosσ * (-1 + 2 * cos2σM * cos2σM) -
-                B / 6 * cos2σM * (-3 + 4 * sinσ * sinσ) * (-3 + 4 * cos2σM * cos2σM)));
+        double Δσ = B * sinσ * (cos2σM + B / 4 * (cosσ * (-1 + 2 * cos2σM * cos2σM)
+                - B / 6 * cos2σM * (-3 + 4 * sinσ * sinσ) * (-3 + 4 * cos2σM * cos2σM)));
 
         double distance = b * A * (σ - Δσ);
 
@@ -152,7 +159,7 @@ public class EarthCalc {
      * Returns (azimuth) bearing using Vincenty formula.
      *
      * @param standPoint The stand point
-     * @param forePoint  The fore point
+     * @param forePoint The fore point
      * @return (azimuth) bearing in degrees to the North
      *
      * @see <a href="http://www.movable-type.co.uk/scripts/latlong.html"></a>
@@ -162,10 +169,11 @@ public class EarthCalc {
     }
 
     /**
-     * Returns final bearing in direction of standPoint→forePoint using Vincenty formula.
+     * Returns final bearing in direction of standPoint→forePoint using Vincenty
+     * formula.
      *
      * @param standPoint The stand point
-     * @param forePoint  The fore point
+     * @param forePoint The fore point
      * @return (azimuth) bearing in degrees to the North
      *
      * @see <a href="http://www.movable-type.co.uk/scripts/latlong.html"></a>
@@ -175,22 +183,23 @@ public class EarthCalc {
     }
 
     /**
-     * Returns the coordinates of a point which is "distance" away
-     * from standPoint in the direction of "bearing"
+     * Returns the coordinates of a point which is "distance" away from
+     * standPoint in the direction of "bearing"
      * <p>
      * Note: North is equal to 0 for bearing value
      *
      * @param standPoint Origin
-     * @param bearing    Direction in degrees
-     * @param distance   distance in meters
+     * @param bearing Direction in degrees
+     * @param distance distance in meters
      * @return forePoint coordinates
      *
      * @see <a href="http://www.movable-type.co.uk/scripts/latlong.html"></a>
      */
     public static Point pointRadialDistance(Point standPoint, double bearing, double distance) {
         /**
-         var φ2 = asin( sin(φ1)*cos(d/R) + cos(φ1)*sin(d/R)*cos(brng) );
-         var λ2 = λ1 + atan2(sin(brng)*sin(d/R)*cos(φ1), cos(d/R)-sin(φ1)*sin(φ2));
+         * var φ2 = asin( sin(φ1)*cos(d/R) + cos(φ1)*sin(d/R)*cos(brng) ); var
+         * λ2 = λ1 + atan2(sin(brng)*sin(d/R)*cos(φ1),
+         * cos(d/R)-sin(φ1)*sin(φ2));
          */
 
         double rlat1 = toRadians(standPoint.latitude);
@@ -205,15 +214,17 @@ public class EarthCalc {
     }
 
     /**
-     * Returns the (azimuth) bearing, in decimal degrees, from standPoint to forePoint
+     * Returns the (azimuth) bearing, in decimal degrees, from standPoint to
+     * forePoint
      *
      * @param standPoint Origin point
-     * @param forePoint  Destination point
+     * @param forePoint Destination point
      * @return (azimuth) bearing, in decimal degrees
      */
     public static double getBearing(Point standPoint, Point forePoint) {
         /**
-         * Formula: θ = atan2( 	sin(Δlong).cos(lat2), cos(lat1).sin(lat2) − sin(lat1).cos(lat2).cos(Δlong) )
+         * Formula: θ = atan2( sin(Δlong).cos(lat2), cos(lat1).sin(lat2) −
+         * sin(lat1).cos(lat2).cos(Δlong) )
          */
 
         double y = sin(toRadians(forePoint.longitude - standPoint.longitude)) * cos(toRadians(forePoint.latitude));
@@ -229,9 +240,9 @@ public class EarthCalc {
      * Returns an area around standPoint
      *
      * @param standPoint The centre of the area
-     * @param distance   Distance around standPoint, im meters
+     * @param distance Distance around standPoint, im meters
      * @return The area
-     * 
+     *
      * @see <a href="http://www.movable-type.co.uk/scripts/latlong.html"></a>
      */
     public static BoundingArea getBoundingArea(Point standPoint, double distance) {
@@ -246,9 +257,10 @@ public class EarthCalc {
     }
 
     private static class Vincenty {
+
         /**
-         * distance is the distance in meter
-         * initialBearing is the initial bearing, or forward azimuth (in reference to North point), in degrees
+         * distance is the distance in meter initialBearing is the initial
+         * bearing, or forward azimuth (in reference to North point), in degrees
          * finalBearing is the final bearing (in direction p1→p2), in degrees
          */
         double distance, initialBearing, finalBearing;

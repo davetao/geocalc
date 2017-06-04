@@ -1,6 +1,7 @@
 /*
  * BSD 3-Clause License
  *
+ * Copyright (c) 2017, Peer to Park
  * Copyright (c) 2015, Grumlimited Ltd (Romain Gallet)
  * All rights reserved.
  *
@@ -30,26 +31,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.grum.geocalc;
+package com.peertopark.java.geocalc;
 
 /**
  * Represents coordinates given in
- * decimal-degrees (d) format
+ * radian-degrees (r) format
  *
  * @author rgallet
  */
-public class DegreeCoordinate extends Coordinate {
+public class RadianCoordinate extends Coordinate {
 
-    public DegreeCoordinate(double decimalDegrees) {
-        this.decimalDegrees = decimalDegrees;
+    private final double radians;
+
+    public RadianCoordinate(double radians) {
+        this.decimalDegrees = Math.toDegrees(radians);
+        this.radians = radians;
     }
-    
-    /**
-     * Build new {@link DegreeCoordinate}
-     * @param decimalDegrees
-     * @return {@link DegreeCoordinate}
-     */
-    public static DegreeCoordinate build(double decimalDegrees) {
-        return new DegreeCoordinate(decimalDegrees);
+
+    public double getRadians() {
+        return radians;
     }
 }

@@ -1,6 +1,7 @@
 /*
  * BSD 3-Clause License
  *
+ * Copyright (c) 2017, Peer to Park
  * Copyright (c) 2015, Grumlimited Ltd (Romain Gallet)
  * All rights reserved.
  *
@@ -29,18 +30,37 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.peertopark.java.geocalc;
 
-package com.grum.geocalc;
+
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 /**
- * Represents coordinates given in
- * Degrees decimal-minutes (D m) format
  *
- * @author rgallet
+ * @author hector
  */
-public class GPSCoordinate extends DMSCoordinate {
-
-    public GPSCoordinate(double wholeDegrees, double minutes) {
-        super(wholeDegrees, minutes, 0);
+public class PointTest {
+    
+    @Test
+    public void testBuild() {
+        Coordinate latitude = new DegreeCoordinate(0);
+        Coordinate longitude = new DegreeCoordinate(0);
+        Point expResult = new Point(latitude, longitude);
+        Point result = Point.build(latitude, longitude);
+        assertEquals(expResult, result);
+    }  
+    
+    
+    @Test
+    public void testBuildDoubleDouble() {
+        double lat = 10.0;
+        double lng = -10.0;
+        Coordinate latitude = new DegreeCoordinate(lat);
+        Coordinate longitude = new DegreeCoordinate(lng);
+        Point expResult = new Point(latitude, longitude);
+        Point result = Point.build(lat, lng);
+        assertEquals(expResult, result);
     }
+    
 }

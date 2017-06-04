@@ -1,6 +1,7 @@
 /*
  * BSD 3-Clause License
  *
+ * Copyright (c) 2017, Peer to Park
  * Copyright (c) 2015, Grumlimited Ltd (Romain Gallet)
  * All rights reserved.
  *
@@ -30,24 +31,62 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.grum.geocalc;
+package com.peertopark.java.geocalc;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+import static java.lang.Math.*;
 
 /**
- * Represents coordinates given in
- * radian-degrees (r) format
+ * Represent a coordinate decimalDegrees, in degrees
  *
  * @author rgallet
  */
-public class RadianCoordinate extends Coordinate {
+abstract public class Coordinate implements Serializable {
+    
+    /**
+     * Degress 
+     */
+    protected double decimalDegrees;
 
-    private double radians;
-
-    public RadianCoordinate(double radians) {
-        this.decimalDegrees = Math.toDegrees(radians);
-        this.radians = radians;
+    public double getValue() {
+        return decimalDegrees;
     }
 
-    public double getRadians() {
-        return radians;
+    public double getDecimalDegrees() {
+        return decimalDegrees;
+    }
+
+    @Override
+    public String toString() {
+        return "DegreeCoordinate{" + "decimalDegrees=" + decimalDegrees + " degrees}";
+    }
+
+    DMSCoordinate getDMSCoordinate() {
+        double _wholeDegrees = (int) decimalDegrees;
+        double remaining = abs(decimalDegrees - _wholeDegrees);
+        double _minutes = (int) (remaining * 60);
+        remaining = remaining * 60 - _minutes;
+        double _seconds = new BigDecimal(remaining * 60).setScale(4, RoundingMode.HALF_UP).doubleValue();
+
+        return new DMSCoordinate(_wholeDegrees, _minutes, _seconds);
+    }
+
+    DegreeCoordinate getDegreeCoordinate() {
+        return new DegreeCoordinate(decimalDegrees);
+    }
+
+    GPSCoordinate getGPSCoordinate() {
+        double _wholeDegrees = floor(decimalDegrees);
+        double remaining = decimalDegrees - _wholeDegrees;
+        double _minutes = floor(remaining * 60);
+
+        return new GPSCoordinate(_wholeDegrees, _minutes);
+    }
+
+    RadianCoordinate getRadianCoordinate() {
+        return new RadianCoordinate(toRadians(decimalDegrees));
     }
 }

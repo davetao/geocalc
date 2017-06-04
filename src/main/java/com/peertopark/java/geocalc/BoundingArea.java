@@ -1,6 +1,7 @@
 /*
  * BSD 3-Clause License
  *
+ * Copyright (c) 2017, Peer to Park
  * Copyright (c) 2015, Grumlimited Ltd (Romain Gallet)
  * All rights reserved.
  *
@@ -29,15 +30,12 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
-package com.grum.geocalc;
+package com.peertopark.java.geocalc;
 
 import java.util.logging.Logger;
 
-
 /**
- * Represents an area, defined by its top left and bottom right
- * coordinates
+ * Represents an area, defined by its top left and bottom right coordinates
  *
  * @author rgallet
  */
@@ -45,8 +43,10 @@ public class BoundingArea {
 
     private static final Logger LOGGER = Logger.getLogger(BoundingArea.class.getName());
 
-    private Point northEast, southWest;
-    private Point southEast, northWest;
+    private final Point northEast;
+    private final Point southWest;
+    private final Point southEast;
+    private final Point northWest;
 
     public BoundingArea(Point northEast, Point southWest) {
         this.northEast = northEast;
@@ -92,13 +92,13 @@ public class BoundingArea {
     public boolean isContainedWithin(Point point) {
         boolean predicate1 = point.latitude >= this.southWest.latitude && point.latitude <= this.northEast.latitude;
 
-        if(!predicate1) {
+        if (!predicate1) {
             return false;
         }
 
         boolean predicate2;
 
-        if(southWest.longitude > northEast.longitude) { //area is going across the max/min longitude boundaries (ie. sort of back of the Earth)
+        if (southWest.longitude > northEast.longitude) { //area is going across the max/min longitude boundaries (ie. sort of back of the Earth)
             //we "split" the area in 2, longitude-wise, point only needs to be in one or the other.
             boolean predicate3 = point.longitude <= northEast.longitude && point.longitude >= -180;
             boolean predicate4 = point.longitude >= southWest.longitude && point.longitude <= 180;
@@ -133,9 +133,10 @@ public class BoundingArea {
         hash = 13 * hash + (this.southWest != null ? this.southWest.hashCode() : 0);
         return hash;
     }
-    
+
     /**
      * Get North Bounding Latitude
+     *
      * @return double Degree value
      */
     public double getNorthLatitude() {
@@ -144,26 +145,29 @@ public class BoundingArea {
 
     /**
      * Get South Bounding Latitude
+     *
      * @return double Degree value
      */
     public double getSouthLatitude() {
         return getSouthWest().getLatitude();
     }
-    
+
     /**
      * Get West Bounding Longitude
+     *
      * @return double Degree value
      */
     public double getWestLongitude() {
         return getSouthWest().getLongitude();
     }
-    
+
     /**
      * Get East Bounding Longitude
+     *
      * @return double Degree value
      */
     public double getEastLongitude() {
         return getNorthEast().getLongitude();
     }
-    
+
 }

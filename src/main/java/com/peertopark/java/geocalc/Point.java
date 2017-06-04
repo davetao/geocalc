@@ -1,6 +1,7 @@
 /*
  * BSD 3-Clause License
  *
+ * Copyright (c) 2017, Peer to Park
  * Copyright (c) 2015, Grumlimited Ltd (Romain Gallet)
  * All rights reserved.
  *
@@ -30,7 +31,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.grum.geocalc;
+package com.peertopark.java.geocalc;
 
 import java.io.Serializable;
 
@@ -40,8 +41,11 @@ import java.io.Serializable;
  * @author rgallet
  */
 public class Point implements Serializable {
-    //decimal degrees
-    double latitude, longitude;
+
+    /**
+     * Decimal degrees
+     */
+    protected double latitude, longitude;
 
     public Point(Coordinate latitude, Coordinate longitude) {
         this.latitude = latitude.getValue();
